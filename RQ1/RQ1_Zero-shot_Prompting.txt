@@ -1,0 +1,8 @@
+We are conducting research to examine your ability to decompose bug descriptions from bug reports. 
+A bug report from the Apache Jira issue tracker may be too complex to be resolved all at once. 
+A better approach could be to decompose the bug descriptions into several smaller, isolated bugs to assist with bug fixing. 
+The bug decomposition process should not involve the summarization of code or logs, which should be kept as they are. 
+After bug decomposition, each bug should be marked with the prefix "B: ". Each bug should be solvable independently without referring to other bugs. 
+Please don't add any extra text or information to the decomposed bugs.
+Next, we will provide a bug description below the dashed line. Please decompose it according to the instructions above. 
+————————————

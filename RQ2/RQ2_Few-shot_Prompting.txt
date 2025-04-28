@@ -1,0 +1,106 @@
+We are conducting research to examine your ability to decompose bug descriptions from bug reports. 
+A bug report from the Apache Jira issue tracker may be too complex to be resolved all at once. 
+A better approach could be to decompose the bug descriptions into several smaller, isolated bugs to assist with bug fixing. 
+The bug decomposition process should not involve the summarization of code or logs, which should be kept as they are. 
+After bug decomposition, each bug should be marked with the prefix "B: ". Each bug should be solvable independently without referring to other bugs. 
+Please don't add any extra text or information to the decomposed bugs.
+
+The following four cases can be used as references for bug decomposition.
+
+Case1: 
+Description: 
+The ASF has updated its privacy policy and all websites must be compliant.
+The full guidelines can be found in https://privacy.apache.org/faq/committers.html
+The Kafka website has a few issues, including:
+It's missing a link to the privacy policy: https://privacy.apache.org/policies/privacy-policy-public.html
+It's using Google Analytics
+It's using Google Fonts
+It's using scripts hosted on Cloudflare CDN
+Embedded videos don't have an image placeholder
+As per the email sent to the PMC, all updates have to be done by July 22.
+
+Decomposed Bugs: 
+B: The Kafka website missing a link to the privacy policy: https://privacy.apache.org/policies/privacy-policy-public.html.
+B: The Kafka website is using Google Analytics.
+B: The Kafka website is using Google Fonts.
+B: The Kafka website is using scripts hosted on Cloudflare CDN.
+B: The Kafka website has embedded videos that don't have an image placeholder.
+
+
+Case2: 
+Description: 
+We omitted to pass user_ctx down in fabric_view_all_docs. Since auth has happened beforehand this hasn't been an obvious issue, but it matters for the _users db as that reacts differently based on the user. couchdb intentionally hides design documents in that database from non-admins and intentionally hides the user docs of other users.
+passing the user ctx down fixes both issues.
+
+Decomposed Bugs: 
+B: We omitted to pass user_ctx down in fabric_view_all_docs. Since auth has happened beforehand this hasn't been an obvious issue, but it matters for the _users db as that reacts differently based on the user. Passing the user ctx down could fix it.
+B: Couchdb intentionally hides design documents in that database from non-admins and intentionally hides the user docs of other users. Passing the user ctx down could fix it.
+
+Case3: 
+Description:
+When the generated stub processes response, it expects the nodes come in a specific order. If the order is different, exception is thrown.
+The code is in parse() methods of different result processing factory.
+For example, the code:
+/// process the "first" element "IsPrivacyChanged"
+if (reader.isStartElement()
+...
+"IsPrivacyChanged").equals(reader.getName())) {
+read the value
+}else
+{
+throw exception
+}
+///now it processes 2nd element.
+if (reader.isStartElement()
+...
+"Name").equals(reader.getName())) {
+read the value
+}else
+{
+throw exception
+}
+If "Name" came in before "IsPrivacyChanged", exception is thrown.
+A loop should be used, and any elements can appear in any order.
+
+Decomposed Bugs: 
+B: When the generated stub processes a response, it currently expects nodes to come in a specific order, and throws an exception if the order differs. If "Name" came in before "IsPrivacyChanged", exception is thrown.
+In the parse() methods of different result processing factories. A loop should be used, and any elements can appear in any order.The following is the code provided by descriptions:
+/// process the "first" element "IsPrivacyChanged"
+if (reader.isStartElement()
+...
+"IsPrivacyChanged").equals(reader.getName())) {
+read the value
+}else
+{
+throw exception
+}
+///now it processes 2nd element.
+if (reader.isStartElement()
+...
+"Name").equals(reader.getName())) {
+read the value
+}else
+{
+throw exception
+}
+If "Name" came in before "IsPrivacyChanged", exception is thrown.
+A loop should be used, and any elements can appear in any order.
+
+Case4:
+Description:
+For a PDF that worked fine under 1.2.1 the height value returned is negative and the wrong value (i.e. using Math.abs() won't fix it). Other PDFs work fine.
+PDF Debug shows "Creator:Crystal Reports" and "Producer:PDF-XChange (XCPRO30.DLL v3.30.0064) (Windows 2k)"
+And when examining the 'Stream' items, the text is not what displays.
+Any suggestions on what to look for so that I can do differential analysis against other PDFs to see what they do/not have in common with this one?
+(It's client data so I can't post the PDF. )
+It's stopping us from moving off 1.2.1 (and later versions fix another issue we have of seeing question marks instead of the actual characters).
+
+Decomposed Bugs: 
+B: For a PDF that worked fine under 1.2.1 the height value returned is negative and the wrong value (i.e. using Math.abs() won't fix it). Other PDFs work fine.
+PDF Debug shows "Creator:Crystal Reports" and "Producer:PDF-XChange (XCPRO30.DLL v3.30.0064) (Windows 2k)"
+It's stopping the user from moving off 1.2.1.
+B: When examining the 'Stream' items, the text is not what displays.
+
+
+Next, we will provide a bug description below the dashed line. Please decompose it according to the instructions above. 
+————————————
